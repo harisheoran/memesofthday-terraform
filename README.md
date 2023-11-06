@@ -1,0 +1,1 @@
+Hosting a static website in AWS S3 bucket using Terraform.
