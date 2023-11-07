@@ -1,7 +1,9 @@
+# create a S3 bucket
 resource "aws_s3_bucket" "mybucket" {
   bucket = var.bucketName
 }
 
+# bucket ownership
 resource "aws_s3_bucket_ownership_controls" "myownershipcontrols" {
   bucket = aws_s3_bucket.mybucket.id
 
@@ -10,6 +12,7 @@ resource "aws_s3_bucket_ownership_controls" "myownershipcontrols" {
   }
 }
 
+# make S3 access public so that anyone can access it
 resource "aws_s3_bucket_public_access_block" "mypublicaccess" {
   bucket = aws_s3_bucket.mybucket.id
 
@@ -19,6 +22,7 @@ resource "aws_s3_bucket_public_access_block" "mypublicaccess" {
   restrict_public_buckets = false
 }
 
+# access control list
 resource "aws_s3_bucket_acl" "myacl" {
   depends_on = [
     aws_s3_bucket_ownership_controls.myownershipcontrols,
@@ -38,6 +42,7 @@ resource "aws_s3_object" "index" {
   content_type = "text/html"
 }
 
+# error.html
 resource "aws_s3_object" "error" {
   bucket = aws_s3_bucket.mybucket.id
   key    = "error.html"
@@ -46,6 +51,7 @@ resource "aws_s3_object" "error" {
   content_type = "text/html"
 }
 
+# main.js
 resource "aws_s3_object" "mainjs" {
   bucket = aws_s3_bucket.mybucket.id
   key    = "main.js"
@@ -54,7 +60,7 @@ resource "aws_s3_object" "mainjs" {
   content_type = "javascript"
 }
 
-
+# configure the html files for website
 resource "aws_s3_bucket_website_configuration" "memesoftheday" {
   bucket = aws_s3_bucket.mybucket.id
 
